@@ -17,6 +17,7 @@ echo 5 - Taskkiller
 echo 6 - IP Renewal
 echo 7 - Who's connected to my PC?
 echo 8 - Change text color
+echo 9 - Uber Elite Haxor
 set /p m=Type 1, 2, 3, or 4 then press enter:
 if %m%==1 goto DisplayIP
 if %m%==2 goto AutoPing
@@ -26,6 +27,7 @@ if %m%==5 goto Taskkiller
 if %m%==6 goto IPRenewal
 if %m%==7 goto PCConnected
 if %m%==8 goto ChangeColor
+if %m%==9 goto matrix
 :DisplayIP
 cls
 echo Displaying IP information
@@ -111,10 +113,13 @@ pause
 goto MAIN
 :ChangeColor
 cls
-echo Please select a color (a is green)
+echo Please select a color (a is green)!
 set /p color=
 color %color%
 cls
 echo Color Set!
 pause
 goto MAIN
+:matrix
+echo %random% %random% %random% %random% %random% %random% %random% %random% %random% %random% %random% %random% %random% %random% 
+goto matrix
