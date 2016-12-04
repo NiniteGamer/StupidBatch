@@ -1,13 +1,26 @@
 echo off
+setlocal enableextensions disabledelayedexpansion
 color a
+REM Debug mode enabled for developer :)
 set debugvar==0
-title Andy Batch v0.0.5
-rem v0.0.5
+set displaysecrets==0
+title Andy Batch v0.0.6
+set tm=%time%
+rem v0.0.6
 cls
 rem Making a batch file with the ability to do what my other batch files do
 :MAIN
 cls
 echo What would you like to do?
+if %debugvar%==1 echo %tm%
+if %debugvar%==1 echo %Date%
+
+REM All credit for this peice of code goes to http://www.robvanderwoude.com/
+REM FOR %%A IN (%Date%) DO SET Today=%%A
+REM SET Now=%Time%
+REM ECHO It's %Today% today
+REM ECHO It's %Now% now
+
 echo ...............................................
 echo TYPE 1-20 to select your task
 echo This batch file is made by Joshua Bennett!
@@ -23,13 +36,13 @@ echo 5 - Taskkiller
 echo 6 - IP Renewal
 echo 7 - Who's connected to my PC?
 echo 8 - Change text color
-rem I don't think I'll leave this in!
-echo 9 - Uber Elite Haxor
-echo 10 - Help!
-echo 11 - Mini-Game!
-echo 12 - Ping!
-echo 13 - Route Table!
+echo 9 - Help!
+echo 10 - Mini-Game!
+echo 11 - Ping!
+echo 12 - Route Table!
 echo 90 - Settings!
+if %displaysecrets%==1 echo 420 - Dank M8
+if %displaysecrets%==1 echo 421 - Uber Elite Haxor
 set /p m=Type 1-20 then press enter:
 if %m%==1 goto DisplayIP
 if %m%==2 goto AutoPing
@@ -39,13 +52,13 @@ if %m%==5 goto Taskkiller
 if %m%==6 goto IPRenewal
 if %m%==7 goto PCConnected
 if %m%==8 goto ChangeColor
-if %m%==9 goto matrix
-if %m%==10 goto help
-if %m%==11 goto minigame
-if %m%==12 goto pinger
+if %m%==9 goto help
+if %m%==10 goto minigame
+if %m%==11 goto pinger
+if %m%==12 goto routetable
 if %m%==420 goto blazeit
+if %m%==421 goto matrix
 if %m%==90 goto settings
-if %m%==13 goto routetable
 :routetable
 cls
 netstat -r
@@ -60,10 +73,12 @@ echo ----------------------------
 echo -
 echo 1 - DisplayIP Settings
 echo 2 - Debug Settings
+echo 3 - Hidden Secrets
 echo 10 - Return to Main Menu
 set /p s=Please enter here:
 if %s%==1 goto DisplayIPSettings
 if %s%==2 goto debug
+if %s%==3 goto HiddenSecrets
 if %s%==10 goto MAIN
 :DisplayIPSettings
 cls
@@ -79,13 +94,31 @@ set /p lp=Please enter here:
 cls
 if %lp%==1 set displayipv6=IP.*
 if %lp%==1 echo Now displaying IPv6 addresses!
-if %lp%==1 if %debugvar%=1 echo #DEBUG# - %displayipv6% - #DEBUG#
+if %lp%==1 if %debugvar%==1 echo #DEBUG# - %displayipv6% - #DEBUG#
 if %lp%==2 set displayipv6=IPv4.*
 if %lp%==2 echo Disabled displaying of IPv6 addresses!
-if %lp%==2 if %debugvar%=1 echo #DEBUG# - %displayipv6% - #DEBUG#
+if %lp%==2 if %debugvar%==1 echo #DEBUG# - %displayipv6% - #DEBUG#
 if %lp%==10 goto settings
 pause
 goto DisplayIPSettings
+:HiddenSecrets
+cls
+echo Do you wish to reveal the hidden secrets! (Yes or No)
+set /p gt=Please enter here:
+if %gt%==yes set displaysecrets=1
+if %gt%==Yes set displaysecrets=1
+if %gt%==no set displaysecrets=0
+if %gt%==No set displaysecrets=0
+cls
+if %displaysecrets%==1 echo Successfully displaying secrets in main menu!
+if %displaysecrets%==0 echo Successfully disabled displaying secrets in main menu!
+pause
+cls
+echo Would you like to return to the settings menu or main menu? (1=Settings 2=Main)
+set /p op=Please enter here:
+if %op%==1 goto settings
+if %op%==2 goto MAIN
+goto settings
 :debug
 cls
 echo Would you like to enable or disable debug?
