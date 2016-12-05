@@ -2,12 +2,17 @@ echo off
 setlocal enableextensions disabledelayedexpansion
 color a
 REM Debug mode enabled for developer :)
-set debugvar==0
+set compdiff==0
+set debugvar==1
 set displaysecrets==0
-title Andy Batch v0.0.6
+title Andy Batch v0.0.7
 set tm=%time%
-rem v0.0.6
+rem v0.0.7
 cls
+echo If you're running windows 10 and the text is small
+echo You can change it by right-clicking the bar and
+echo going to properties then font to change the font size
+pause
 rem Making a batch file with the ability to do what my other batch files do
 :MAIN
 cls
@@ -53,7 +58,8 @@ if %m%==6 goto IPRenewal
 if %m%==7 goto PCConnected
 if %m%==8 goto ChangeColor
 if %m%==9 goto help
-if %m%==10 goto minigame
+REM if %m%==10 goto gamemain
+if %m%==10 goto play
 if %m%==11 goto pinger
 if %m%==12 goto routetable
 if %m%==420 goto blazeit
@@ -74,11 +80,13 @@ echo -
 echo 1 - DisplayIP Settings
 echo 2 - Debug Settings
 echo 3 - Hidden Secrets
+echo 4 - Minigame Difficulty
 echo 10 - Return to Main Menu
 set /p s=Please enter here:
 if %s%==1 goto DisplayIPSettings
 if %s%==2 goto debug
 if %s%==3 goto HiddenSecrets
+if %s%==4 goto difffromsettings
 if %s%==10 goto MAIN
 :DisplayIPSettings
 cls
@@ -214,73 +222,139 @@ cls
 echo IP Renewal completed!
 pause
 goto MAIN
-:minigame
+REM :gamemain
+REM cls
+REM echo -
+REM echo --------------------------------------
+REM echo Welcome to the Computer Guessing Game!
+REM echo Please enter 1, 2, or 3 Below!
+REM echo --------------------------------------
+REM echo -
+REM echo 1 - Play!
+REM echo 2 - How to play!
+REM echo 3 - Return to Main Menu!
+REM set /p m=Please enter one here!
+REM if %m%==1 goto play
+REM if %m%==2 goto howtoplay
+REM if %m%==3 goto quit
+:play
 cls
-echo Please choose a difficulty!
-echo Easy, Medium, or Hard
-echo This just effect how large of a number range there is!
-set /p playerdiff=Please enter here:
-if %playerdiff%==Easy set playerdiff=1
-if %playerdiff%==easy set playerdiff=1
-if %playerdiff%==Medium set playerdiff=2
-if %playerdiff%==medium set playerdiff=2
-if %playerdiff%==Hard set playerdiff=3
-if %playerdiff%==hard set playerdiff=3
-if %playerdiff%==1 set diff=Easy
-if %playerdiff%==2 set diff=Medium
-if %playerdiff%==3 set diff=Hard
-if %diff%==Easy set numbrang=1-100
-if %diff%==Medium set numbrang=1-1000
-if %diff%==Hard set numbrang=1-10000
-cls
-echo You've selected %diff% and the number range is %numbrang%!
+echo If you want to change your difficulty
+echo Please go to the settings menu for now
 pause
+if %compdiff%==0 (
+	goto diff
+)
+:playcont
 cls
-if %playerdiff%==1 set randgen=%%100+1
-if %playerdiff%==2 set randgen=%%1000+1
-if %playerdiff%==3 set randgen=%%10000+1
-if %debugvar%==1 echo #DEBUG# - %playerdiff% %randgen% - #DEBUG#
-echo Please enter a number below!
-echo You've selected %diff% and the number range is %numbrang%!
-set /p playergiven=Please enter here:
-if %playergiven% GTR 100 if %playerdiff%==1 (
+echo Welcome to the Computer Guessing Game
+if %compdiff%==1 set randgen=%%100+1
+if %compdiff%==2 set randgen=%%1000+1
+if %compdiff%==3 set randgen=%%10000+1
+if %compdiff%==4 set randgen=%%30000+1
+if %compdiff%==1 set diff=Easy
+if %compdiff%==1 set numrange=1-100
+if %compdiff%==2 set diff=Medium
+if %compdiff%==2 set numrange=1-1000
+if %compdiff%==3 set diff=Hard
+if %compdiff%==3 set numrange=1-10000
+if %compdiff%==4 set diff=Insane
+if %compdiff%==4 set numrange=1-30000
+if %debugvar%==1 echo #DEBUG# - %compdiff% %randgen% %diff% %numrange% - #DEBUG#
+echo You've selected %diff% and the number range is %numrange%!
+pause
+set /p q=Please enter your number here:
+if %q% GTR 100 if %compdiff%==1 (
 	cls
 	echo You can only enter number 1 - 100
 	pause
-	goto minigame
+	goto play
 )
-if %playergiven% GTR 1000 if %playerdiff%==2 (
+if %q% GTR 1000 if %compdiff%==2 (
 	cls
-	echo You can only enter numbers between 1 - 1000!
+	echo You can only enter number 1 - 1000
 	pause
-	goto minigame
+	goto play
 )
-if %playergiven% GTR 10000 if %playerdiff%==3 (
+if %q% GTR 10000 if %compdiff%==3 (
 	cls
-	echo You can only enter numbers between 1 - 10000!
+	echo You can only enter number 1 - 10000
 	pause
-	goto minigame
+	goto play
 )
-set /A computergiven=%random%%randgen%
-if %debugvar%==1 echo #DEBUG# - Computers Random Number - %computergiven% - #DEBUG#
-if %playergiven% GTR %computergiven% (
-	echo Player wins! %playergiven% bigger than %computergiven%
+if %q% GTR 30000 if %compdiff%==4 (
+	cls
+	echo You can only enter number 1 - 30000
+	pause
+	goto play
+)
+set /a computernumb=%random%%randgen%
+if %debugvar%==1 echo #DEBUG# - Computers Random Number - %computernumb% - #DEBUG#
+if %q% GTR %computernumb% (
+	echo Player wins! %q% bigger than %computernumb%
 ) else (
-	echo Computer Wins! %computergiven% bigger than %playergiven%
+	echo Computer Wins! %computernumb% bigger than %q%
 )
 pause
 cls
-echo Would you like to play again? (1 for yes, 2 for no)!
-set /p yu=Please enter here:
-if %yu%==1 goto minigame
-if %yu%==2 goto MAIN
-:PCConnected
-cls
-echo Finding who's connected to your PC!
-cls
-netstat
-echo Found all the IPs currently communicating to your machine!
+echo Would you like to return to the main menu?
+echo Yes
+echo No
+set /p ui=Please enter here:
+if %ui%==Yes goto MAIN
+if %ui%==yes goto MAIN
+if %ui%==No goto play
+if %ui%==no goto play
 pause
+:diff
+cls
+echo -
+echo ---------------------------------
+if %debugvar%==1 echo #DEBUG# - Computer Diff is %compdiff% - #DEBUG#
+echo Please select a difficulty below
+echo ---------------------------------
+echo -
+echo Easy
+echo Medium
+echo Hard
+echo Insane
+set /p h=Please enter here:
+if %h%==Easy set compdiff=1
+if %h%==Medium set compdiff=2
+if %h%==Hard set compdiff=3
+if %h%==Insane set compdiff=4
+if %h%==easy set compdiff=1
+if %h%==medium set compdiff=2
+if %h%==hard set compdiff=3
+if %h%==insane set compdiff=4
+if %debugvar%==1 echo #DEBUG# - Computer diff now set to %compdiff% - #DEBUG#
+pause
+goto playcont
+:difffromsettings
+cls
+echo -
+echo ---------------------------------
+if %debugvar%==1 echo #DEBUG# - Computer Diff is %compdiff% - #DEBUG#
+echo Please select a difficulty below
+echo ---------------------------------
+echo -
+echo Easy
+echo Medium
+echo Hard
+echo Insane
+set /p h=Please enter here:
+if %h%==Easy set compdiff=1
+if %h%==Medium set compdiff=2
+if %h%==Hard set compdiff=3
+if %h%==Insane set compdiff=4
+if %h%==easy set compdiff=1
+if %h%==medium set compdiff=2
+if %h%==hard set compdiff=3
+if %h%==insane set compdiff=4
+if %debugvar%==1 echo #DEBUG# - Computer diff now set to %compdiff% - #DEBUG#
+pause
+goto settings
+:quit
 goto MAIN
 :ChangeColor
 cls
@@ -292,11 +366,17 @@ echo Gray, LightAqua, LightPurple, BrightWhite, Blue, Aqua, Purple, White
 echo --------------------------------------------------------------------
 set /p color=Please enter here:
 if %color%==LightGreen set color=a
+if %color%==lightgreen set color=a
 if %color%==LightRed set color=c
+if %color%==lightred set color=c
 if %color%==LightYellow set color=e
+if %color%==lightyellow set color=e
 if %color%==Black set color=0
+if %color%==black set color=0
 if %color%==Green set color=2
+if %color%==green set color=2
 if %color%==Red set color=4
+if %color%==red set color=4
 if %color%==Yellow set color=6
 if %color%==Gray set color=8
 if %color%==LightAqua set color=b
